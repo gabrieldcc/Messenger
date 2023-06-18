@@ -10,7 +10,7 @@ import UIKit
 class RegisterViewController: UIViewController {
     
     
-    //MARK: Lifecycle
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -31,35 +31,46 @@ class RegisterViewController: UIViewController {
         super.viewDidLayoutSubviews()
         scrollView.frame = view.bounds
         let size = view.width/3
-        imageView.frame = CGRect(x: (scrollView.width-size)/2,
-                                 y: 20,
-                                 width: size,
-                                 height: size)
+        imageView.frame = CGRect(
+            x: (scrollView.width-size)/2,
+            y: 20,
+            width: size,
+            height: size
+        )
         imageView.layer.cornerRadius = imageView.width/2.0
-        firstNameField.frame = CGRect(x: 30,
-                                  y: imageView.bottom + 10,
-                                  width: scrollView.width-60,
-                                  height: 52)
-        lastNameField.frame = CGRect(x: 30,
-                                  y: firstNameField.bottom + 10,
-                                  width: scrollView.width-60,
-                                  height: 52)
-        emailField.frame = CGRect(x: 30,
-                                  y: lastNameField.bottom + 10,
-                                  width: scrollView.width-60,
-                                  height: 52)
-        passwordField.frame = CGRect(x: 30,
-                                     y: emailField.bottom + 10,
-                                     width: scrollView.width-60,
-                                     height: 52)
-        registerButton.frame = CGRect(x: 30,
-                                   y: passwordField.bottom + 10,
-                                   width: scrollView.width-60,
-                                   height: 52)
-        
+        firstNameField.frame = CGRect(
+            x: 30,
+            y: imageView.bottom + 10,
+            width: scrollView.width-60,
+            height: 52
+        )
+        lastNameField.frame = CGRect(
+            x: 30,
+            y: firstNameField.bottom + 10,
+            width: scrollView.width-60,
+            height: 52
+        )
+        emailField.frame = CGRect(
+            x: 30,
+            y: lastNameField.bottom + 10,
+            width: scrollView.width-60,
+            height: 52
+        )
+        passwordField.frame = CGRect(
+            x: 30,
+            y: emailField.bottom + 10,
+            width: scrollView.width-60,
+            height: 52
+        )
+        registerButton.frame = CGRect(
+            x: 30,
+            y: passwordField.bottom + 10,
+            width: scrollView.width-60,
+            height: 52
+        )
     }
     
-    //MARK: UI Components
+    //MARK: - UI Components
     private let scrollView: UIScrollView = {
         let component = UIScrollView()
         component.clipsToBounds = true
@@ -149,7 +160,7 @@ class RegisterViewController: UIViewController {
         return component
     }()
     
-    //MARK: Functions
+    //MARK: - Functions
     private func setupSubView() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
@@ -161,18 +172,25 @@ class RegisterViewController: UIViewController {
     }
     
     func alertUserLoginError() {
-        let alert = UIAlertController(title: "Woops",
-                                      message: "Please enter all information to create a new account",
-                                      preferredStyle: .alert)
-        let action = UIAlertAction(title: "Dismiss",
-                                   style: .cancel,
-                                   handler: nil)
+        let alert = UIAlertController(
+            title: "Woops",
+            message: "Please enter all information to create a new account",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(
+            title: "Dismiss",
+            style: .cancel,
+            handler: nil
+        )
         alert.addAction(action)
         present(alert, animated: true)
     }
     
     private func setupActionButtons() {
-        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        registerButton.addTarget(
+            self,
+            action: #selector(registerButtonTapped), for: .touchUpInside
+        )
         let gesture = UITapGestureRecognizer(
             target: self,
             action: #selector(didTapChangeProfilePic)
@@ -182,7 +200,7 @@ class RegisterViewController: UIViewController {
         imageView.addGestureRecognizer(gesture)
     }
     
-    //MARK: Actions
+    //MARK: - Actions
     @objc private func registerButtonTapped() {
         emailField.resignFirstResponder()
         passwordField.resignFirstResponder()
@@ -212,6 +230,7 @@ class RegisterViewController: UIViewController {
     }
 }
 
+    //MARK: - UITextFieldDelegate
 extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == emailField {
@@ -222,7 +241,8 @@ extension RegisterViewController: UITextFieldDelegate {
         return true
     }
 }
-
+ 
+//MARK: - UIImagePickerControllerDelegate && UINavigationControllerDelegate
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func presentPhotoActionSheet() {
@@ -231,11 +251,21 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
             message: "How wold you like to select a picture?",
             preferredStyle: .actionSheet
         )
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let takePhotoAction = UIAlertAction(title: "Take Photo", style: .default, handler: { [weak self] _ in
+        let cancelAction = UIAlertAction(
+            title: "Cancel",
+            style: .cancel,
+            handler: nil
+        )
+        let takePhotoAction = UIAlertAction(
+            title: "Take Photo",
+            style: .default,
+            handler: { [weak self] _ in
             self?.presentCamera()
         })
-        let choosePhotoAction = UIAlertAction(title: "Choose Photo", style: .default, handler: { [weak self]_ in
+        let choosePhotoAction = UIAlertAction(
+            title: "Choose Photo",
+            style: .default,
+            handler: { [weak self]_ in
             self?.presentPhotoPicker()
         })
         actionSheet.addAction(cancelAction)
