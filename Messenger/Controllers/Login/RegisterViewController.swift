@@ -219,7 +219,7 @@ class RegisterViewController: UIViewController {
         }
         
         //Validate if user exists
-        DatabaseManager.shared.userExists(with: email) { [weak self] exists in
+        DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
             guard let strongSelf = self else {
                 return
             }
@@ -236,7 +236,7 @@ class RegisterViewController: UIViewController {
                     guard let strongSelf = self else {
                         return
                     }
-                    guard authResult == nil, error == nil else {
+                    guard authResult != nil, error == nil else {
                         print("error creating user")
                         return
                     }
@@ -247,7 +247,7 @@ class RegisterViewController: UIViewController {
                     )
                     strongSelf.navigationController?.dismiss(animated: true)
                 })
-        }
+        })
     }
     
     @objc private func didTapRegiter() {
