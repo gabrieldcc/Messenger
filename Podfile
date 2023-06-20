@@ -17,7 +17,7 @@ pod 'GoogleSignIn'
 
 pod 'MessageKit'
 pod 'JGProgressHUD'
-#pod 'RealmSwift'
+pod 'RealmSwift', '~>10.39.01'
 pod 'SDWebImage'
 	
 end
