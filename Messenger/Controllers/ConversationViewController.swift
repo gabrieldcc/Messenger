@@ -9,11 +9,15 @@ import UIKit
 import FirebaseAuth
 
 class ConversationViewController: UIViewController {
+    
+    private let tableView: UITableView = {
+        let component = UITableView()
+        
+        return component
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .red
-        //DatabaseManager.shared.test()
     }
 
     override func viewDidAppear(_ animated: Bool) {
