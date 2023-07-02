@@ -14,6 +14,7 @@ class NewConversationViewController: UIViewController {
     private var users: [[String : String]] = []
     private var results: [[String : String]] = []
     private var hasFetched = false
+    public var completion: (([String : String]) -> (Void))?
     
     private let searchBar: UISearchBar = {
         let component = UISearchBar()
@@ -70,6 +71,7 @@ class NewConversationViewController: UIViewController {
     }
 }
 
+    //MARK: - TableView
 extension NewConversationViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results.count
@@ -84,11 +86,14 @@ extension NewConversationViewController: UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //start conversation
+        let targetUserData = results[indexPath.row]
+        dismiss(animated: true, completion: { [weak self] in
+            self?.completion?(targetUserData)
+        })
     }
-    
-    
 }
 
+    //MARK: - SeachBar
 extension NewConversationViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.replacingOccurrences(of: " ", with: "").isEmpty else {
