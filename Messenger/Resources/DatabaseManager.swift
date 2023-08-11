@@ -14,10 +14,10 @@ final class DatabaseManager {
     
     private let database = Database.database().reference()
     
-    static func safeEmail(emailAddress: String) -> String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
+    static func safe(string: String) -> String {
+        var safeString = string.replacingOccurrences(of: ".", with: "-")
+        safeString = safeString.replacingOccurrences(of: "@", with: "-")
+        return safeString
     }
 }
 
@@ -121,7 +121,7 @@ extension DatabaseManager {
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
-        let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
+        let safeEmail = DatabaseManager.safe(string: currentEmail)
         let reference = database.child("\(safeEmail)")
         reference.observeSingleEvent(of: .value, with: { snapshot in
             guard var userNode = snapshot.value as? [String:Any] else {
@@ -216,6 +216,8 @@ extension DatabaseManager {
 //            "sender_email": String,
 //            "isRead": true/false,
 //        }
+        let messageDate = firstMessage.sentDate
+        let dateString = ChatViewController.dateFormatter.string(from: messageDate)
         var message = ""
         switch firstMessage.kind {
             
@@ -240,13 +242,14 @@ extension DatabaseManager {
         case .custom(_):
             break
         }
-        let messageDate = firstMessage.sentDate
-        let dateString = ChatViewController.dateFormatter.string(from: messageDate)
         
-        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else {
+        guard let myEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             completion(false)
             return
         }
+        
+        let currentUserEmail = DatabaseManager.safe(string: myEmail)
+        
         let collectionMessage: [String: Any] = [
             "id": firstMessage.messageId,
             "type": firstMessage.kind.messageKindString,
@@ -260,6 +263,9 @@ extension DatabaseManager {
                 collectionMessage
             ]
         ]
+        
+        print("adding convo: \(conversationID)")
+        
         database.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
             guard error == nil else {
                 completion(false)
